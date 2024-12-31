@@ -76,19 +76,19 @@ public class kimchiAuton extends LinearOpMode {
         waitForStart();
         imu.resetYaw();
 
-        vSlidesUp(1535);
+        //vSlidesUp(1535);
         //wrist down
-        lvWrist.setPosition(.25);
-        rvWrist.setPosition(-1);
+        //lvWrist.setPosition(.25);
+        //rvWrist.setPosition(-1);
         forward(1200, .5);
         //claw open
-        vClaw.setPosition(0);
+        //vClaw.setPosition(0);
 
         //1st specimen scored! (hopefully)
 
-        vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         stopResetEncoders();
-        vSlidesDown(1000);
+        //vSlidesDown(1000);
         reverse(200, .5);
 
         stopResetEncoders();
@@ -108,23 +108,23 @@ public class kimchiAuton extends LinearOpMode {
         stopResetEncoders();
         forward(400, .5);
         turnRE(-170, .5);
-        slidesDownMS(250);
+        //slidesDownMS(250);
         stopResetEncoders();
         forward(830, .5);
-        vClaw.setPosition(1);
+        //vClaw.setPosition(1);
 
         //specimen grabbed from wall!
 
         sleep(750);
-        vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        vSlidesUp(1000);
+        //vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //vSlidesUp(1000);
         stopResetEncoders();
         reverse(500, .5);
         stopResetEncoders();
         strafeRight(2300, .5);
         turnRE(0,.5);
-        vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        vSlidesUp(800);
+        //vSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //vSlidesUp(800);
         stopResetEncoders();
         forward(650, .5);
 
