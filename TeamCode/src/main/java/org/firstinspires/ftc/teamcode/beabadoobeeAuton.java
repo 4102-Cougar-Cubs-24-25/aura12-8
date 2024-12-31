@@ -27,7 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.lang.Math;
 
-@Autonomous(name="Skibidi Right Park")
+@Autonomous(name="Skibidi Park")
 public class beabadoobeeAuton extends LinearOpMode {
     private IMU imu;
     private DcMotor rightFront; //rightFront is the right front wheel of the bot
