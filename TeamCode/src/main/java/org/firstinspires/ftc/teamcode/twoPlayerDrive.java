@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name="sigma 6.5")
+@TeleOp(name="sigma 7.0")
 
 public class twoPlayerDrive extends LinearOpMode{
     //define motors and variables here
@@ -65,7 +65,6 @@ public class twoPlayerDrive extends LinearOpMode{
         vSlide.setDirection(DcMotor.Direction.REVERSE);
         hSlide.setDirection(DcMotor.Direction.FORWARD);
 
-        vSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         Gamepad karel = new Gamepad();
@@ -75,15 +74,14 @@ public class twoPlayerDrive extends LinearOpMode{
         imuParameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
         imu.initialize(imuParameters);
 
-        vClaw.setPosition(1);
         waitForStart();
         imu.resetYaw();
         while (opModeIsActive()) {
 
-            telemetry.addData("sigma", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.addData("rizz", leftFront.getCurrentPosition());
+            telemetry.addData("sigma (imu)", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("rizz (lf)", leftFront.getCurrentPosition());
             telemetry.addData("aura (h)", hClawOpen);
-            telemetry.addData("fein (v)", vClawOpen);
+            telemetry.addData("fein (v)", vClaw.getPosition());
 
             telemetry.update();
 
@@ -91,7 +89,7 @@ public class twoPlayerDrive extends LinearOpMode{
             karelNow.copy(gamepad2);
 
             double y = -gamepad1.left_stick_x;
-            double x = gamepad1.left_stick_y * 1.1;
+            double x = gamepad1.left_stick_y;
             double rx = gamepad1.right_stick_x;
             double div = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
@@ -101,67 +99,60 @@ public class twoPlayerDrive extends LinearOpMode{
             rightBack.setPower(Math.pow((y + x + (rx*.85)),3)/div);
 
             if(gamepad2.right_trigger > 0){
-                vSlide.setPower(0.7);
+                vSlide.setPower(-0.9);
             } else if(gamepad2.right_bumper){
-                vSlide.setPower(-0.5);
+                vSlide.setPower(0.7);
             } else {
-                vSlide.setPower(0);
+                vSlide.setPower(-0.1);
             }
 
             if(gamepad2.left_trigger > 0){
-                hSlide.setPower(0.7);
+                hSlide.setPower(0.9);
             } else if(gamepad2.left_bumper){
-                hSlide.setPower(-0.5);
+                hSlide.setPower(-0.7);
             } else {
                 hSlide.setPower(0);
             }
 
             //all wrists and claws are normal (positional) servos
-            //find the positions for all of them
-
-            //vWrist up - test this
-            if(gamepad2.dpad_up){
-                lvWrist.setPosition(-1);
-                rvWrist.setPosition(.25);
-            }
-
-            //vWrist down - test this
-            if(gamepad2.dpad_down){
-                lvWrist.setPosition(.25);
-                rvWrist.setPosition(-1);
-            }
-
-            //hWrist up - test this
-            if(gamepad2.dpad_left){
-                rhWrist.setPosition(0);
-                lhWrist.setPosition(1);
-            }
-
-            //hWrist down - test this
             if(gamepad2.dpad_right){
-                rhWrist.setPosition(.6);
-                lhWrist.setPosition(-.6);
+                lvWrist.setPosition(0);
+                rvWrist.setPosition(.66);
             }
 
-            //vClaw open/close toggle - needs testing
+            if(gamepad2.dpad_left){
+                lvWrist.setPosition(.66);
+                rvWrist.setPosition(0);
+            }
+
+            if(gamepad2.dpad_down){
+                rhWrist.setPosition(0);
+                lhWrist.setPosition(.35);
+            }
+
+            if(gamepad2.dpad_up){
+                rhWrist.setPosition(.35);
+                lhWrist.setPosition(0);
+            }
+
             if(karelNow.x && !karel.x){
                 hClawOpen = !hClawOpen;
 
-                if(hClawOpen == true){
+                if(hClawOpen){
                     hClaw.setPosition(0);
-                } else if(hClawOpen == false){
-                    hClaw.setPosition(1);
+                } else if(!hClawOpen){
+                    hClaw.setPosition(.8);
                 }
             }
 
-            //hClaw open/close toggle - this works
             if(karelNow.b && !karel.b){
                 vClawOpen = !vClawOpen;
-
-                if(vClawOpen == true){
+            }
+            if(gamepad2.b) {
+                if (vClawOpen) {
+                    vClaw.setPosition(.8);
+                } else if (!vClawOpen) {
                     vClaw.setPosition(0);
-                } else if(vClawOpen == false) {
-                    vClaw.setPosition(1);
                 }
             }
         }
